@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Ноя 29 2022 г., 09:22
+-- Время создания: Дек 02 2022 г., 09:21
 -- Версия сервера: 8.0.24
 -- Версия PHP: 8.0.8
 
@@ -29,8 +29,17 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `category` (
   `id` int NOT NULL,
-  `countries` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+  `categories` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `category`
+--
+
+INSERT INTO `category` (`id`, `categories`) VALUES
+(1, 'Design & Art'),
+(2, 'Engineering'),
+(3, 'Sales & Marketing');
 
 -- --------------------------------------------------------
 
@@ -54,24 +63,6 @@ INSERT INTO `city` (`id`, `country`, `citys`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `company`
---
-
-CREATE TABLE `company` (
-  `id` int NOT NULL,
-  `companies` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Дамп данных таблицы `company`
---
-
-INSERT INTO `company` (`id`, `companies`) VALUES
-(1, 'big one');
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `country`
 --
 
@@ -90,21 +81,30 @@ INSERT INTO `country` (`id`, `countries`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `gender`
+-- Структура таблицы `jobs`
 --
 
-CREATE TABLE `gender` (
+CREATE TABLE `jobs` (
   `id` int NOT NULL,
-  `genders` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `city` int NOT NULL,
+  `job_nature` int NOT NULL,
+  `category` int NOT NULL,
+  `salary_from` int DEFAULT NULL,
+  `salary_to` int DEFAULT NULL,
+  `vacancy_tally` int NOT NULL,
+  `published` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Дамп данных таблицы `gender`
+-- Дамп данных таблицы `jobs`
 --
 
-INSERT INTO `gender` (`id`, `genders`) VALUES
-(1, 'male'),
-(2, 'female');
+INSERT INTO `jobs` (`id`, `title`, `description`, `city`, `job_nature`, `category`, `salary_from`, `salary_to`, `vacancy_tally`, `published`) VALUES
+(1, 'Software Engineer', 'Job description There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing.  Variations of passages of lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing.  Responsibility The applicants should have experience in the following areas. Have sound knowledge of commercial activities. Leadership, analytical, and problem-solving abilities. Should have vast knowledge in IAS/ IFRS, Company Act, Income Tax, VAT. Qualifications The applicants should have experience in the following areas. Have sound knowledge of commercial activities. Leadership, analytical, and problem-solving abilities. Should have vast knowledge in IAS/ IFRS, Company Act, Income Tax, VAT. Benefits There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing.', 1, 2, 1, 50, 120, 2, '2022-12-02 06:09:25'),
+(2, 'Digital Marketer', 'Job description There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing.  Variations of passages of lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing.  Responsibility The applicants should have experience in the following areas. Have sound knowledge of commercial activities. Leadership, analytical, and problem-solving abilities. Should have vast knowledge in IAS/ IFRS, Company Act, Income Tax, VAT. Qualifications The applicants should have experience in the following areas. Have sound knowledge of commercial activities. Leadership, analytical, and problem-solving abilities. Should have vast knowledge in IAS/ IFRS, Company Act, Income Tax, VAT. Benefits There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing.', 1, 2, 1, 50, 120, 2, '2022-12-02 06:09:25'),
+(3, 'Wordpress Developer', 'Job description\r\nThere are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing.\r\n\r\nVariations of passages of lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing.\r\n\r\nResponsibility\r\nThe applicants should have experience in the following areas.\r\nHave sound knowledge of commercial activities.\r\nLeadership, analytical, and problem-solving abilities.\r\nShould have vast knowledge in IAS/ IFRS, Company Act, Income Tax, VAT.\r\nQualifications\r\nThe applicants should have experience in the following areas.\r\nHave sound knowledge of commercial activities.\r\nLeadership, analytical, and problem-solving abilities.\r\nShould have vast knowledge in IAS/ IFRS, Company Act, Income Tax, VAT.\r\nBenefits\r\nThere are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don\'t look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn\'t anything embarrassing.', 1, 1, 2, 50, 120, 1, '2022-12-02 08:10:41');
 
 -- --------------------------------------------------------
 
@@ -128,58 +128,22 @@ INSERT INTO `job_nature` (`id`, `job_natures`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `job_summery`
+-- Структура таблицы `titles`
 --
 
-CREATE TABLE `job_summery` (
-  `id` int NOT NULL,
-  `job_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `responsability` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `qualifications` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `Benefits` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `city` int NOT NULL,
-  `company_name` int NOT NULL,
-  `job_nature` int NOT NULL,
-  `vacancy` int NOT NULL,
-  `salary` int NOT NULL,
-  `published` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `salary`
---
-
-CREATE TABLE `salary` (
-  `id` int NOT NULL,
-  `salaries` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Дамп данных таблицы `salary`
---
-
-INSERT INTO `salary` (`id`, `salaries`) VALUES
-(1, '50k-120k/y');
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `vacancy`
---
-
-CREATE TABLE `vacancy` (
+CREATE TABLE `titles` (
   `id` int NOT NULL,
   `vacancies` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Дамп данных таблицы `vacancy`
+-- Дамп данных таблицы `titles`
 --
 
-INSERT INTO `vacancy` (`id`, `vacancies`) VALUES
-(1, 'Software Engineer');
+INSERT INTO `titles` (`id`, `vacancies`) VALUES
+(1, 'Software Engineer'),
+(2, 'Digital Marketer'),
+(3, 'Wordpress Developer');
 
 --
 -- Индексы сохранённых таблиц
@@ -199,22 +163,19 @@ ALTER TABLE `city`
   ADD KEY `country` (`country`);
 
 --
--- Индексы таблицы `company`
---
-ALTER TABLE `company`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Индексы таблицы `country`
 --
 ALTER TABLE `country`
   ADD PRIMARY KEY (`id`);
 
 --
--- Индексы таблицы `gender`
+-- Индексы таблицы `jobs`
 --
-ALTER TABLE `gender`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `city` (`city`),
+  ADD KEY `job_nature` (`job_nature`),
+  ADD KEY `category` (`category`);
 
 --
 -- Индексы таблицы `job_nature`
@@ -223,26 +184,9 @@ ALTER TABLE `job_nature`
   ADD PRIMARY KEY (`id`);
 
 --
--- Индексы таблицы `job_summery`
+-- Индексы таблицы `titles`
 --
-ALTER TABLE `job_summery`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `city` (`city`),
-  ADD KEY `job_nature` (`job_nature`),
-  ADD KEY `vacancy` (`vacancy`),
-  ADD KEY `salary` (`salary`),
-  ADD KEY `company_name` (`company_name`);
-
---
--- Индексы таблицы `salary`
---
-ALTER TABLE `salary`
-  ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `vacancy`
---
-ALTER TABLE `vacancy`
+ALTER TABLE `titles`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -253,18 +197,12 @@ ALTER TABLE `vacancy`
 -- AUTO_INCREMENT для таблицы `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT для таблицы `city`
 --
 ALTER TABLE `city`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT для таблицы `company`
---
-ALTER TABLE `company`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
@@ -274,10 +212,10 @@ ALTER TABLE `country`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT для таблицы `gender`
+-- AUTO_INCREMENT для таблицы `jobs`
 --
-ALTER TABLE `gender`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+ALTER TABLE `jobs`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT для таблицы `job_nature`
@@ -286,22 +224,10 @@ ALTER TABLE `job_nature`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT для таблицы `job_summery`
+-- AUTO_INCREMENT для таблицы `titles`
 --
-ALTER TABLE `job_summery`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT для таблицы `salary`
---
-ALTER TABLE `salary`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT для таблицы `vacancy`
---
-ALTER TABLE `vacancy`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `titles`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
@@ -314,14 +240,12 @@ ALTER TABLE `city`
   ADD CONSTRAINT `city_ibfk_1` FOREIGN KEY (`country`) REFERENCES `country` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `job_summery`
+-- Ограничения внешнего ключа таблицы `jobs`
 --
-ALTER TABLE `job_summery`
-  ADD CONSTRAINT `job_summery_ibfk_1` FOREIGN KEY (`salary`) REFERENCES `salary` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `job_summery_ibfk_2` FOREIGN KEY (`city`) REFERENCES `city` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `job_summery_ibfk_3` FOREIGN KEY (`company_name`) REFERENCES `company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `job_summery_ibfk_4` FOREIGN KEY (`vacancy`) REFERENCES `vacancy` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `job_summery_ibfk_5` FOREIGN KEY (`job_nature`) REFERENCES `job_nature` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `jobs`
+  ADD CONSTRAINT `jobs_ibfk_2` FOREIGN KEY (`city`) REFERENCES `city` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `jobs_ibfk_5` FOREIGN KEY (`job_nature`) REFERENCES `job_nature` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `jobs_ibfk_7` FOREIGN KEY (`category`) REFERENCES `category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
