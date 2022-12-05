@@ -3,6 +3,17 @@
 
     $jobs_listed = $db->query("SELECT SUM(vacancy_tally) as sum FROM jobs")->fetch(PDO::FETCH_ASSOC);
 
+    $keyword = $_GET['keyword'];
+    $loc = $_GET['loc'];
+    $cat = $_GET['exp'];
+    $type = $_GET['type'];
+    $qua = $_GET['qua'];
+    $sal = $_GET['sal'];
+
+    $str = "";
+    if (isset($loc)) $str+= "";
+    $db->query("");
+
     $jobs = $db->query("
         SELECT title, citys, countries, job_natures, published
         FROM jobs
@@ -128,7 +139,7 @@
                     <div class="job_filter white-bg">
                         <div class="form_inner white-bg">
                             <h3>Filter</h3>
-                            <form action="/app/search.php">
+                            <form action="/www/jobs.php">
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="single_field">
@@ -138,16 +149,16 @@
                                     <div class="col-lg-12">
                                         <div class="single_field">
                                             <select class="wide" name="loc">
-                                                <option data-display="Location">Location</option>
-                                                <option value="1">Rangpur</option>
-                                                <option value="2">Dhaka </option>
+                                                <option data-display="Location" value="">Location</option>
+                                                <option value="Rangpur">Rangpur</option>
+                                                <option value="Dhaka">Dhaka </option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="single_field">
-                                            <select class="wide" name="category">
-                                                <option data-display="Category">Category</option>
+                                            <select class="wide" name="cat">
+                                                <option data-display="Category" value="">Category</option>
                                                 <option value="1">Category 1</option>
                                                 <option value="2">Category 2 </option>
                                             </select>
@@ -156,7 +167,7 @@
                                     <div class="col-lg-12">
                                         <div class="single_field">
                                             <select class="wide" name="exp">
-                                                <option data-display="Experience">Experience</option>
+                                                <option data-display="Experience" value="">Experience</option>
                                                 <option value="1">Experience 1</option>
                                                 <option value="2">Experience 2 </option>
                                             </select>
@@ -164,8 +175,8 @@
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="single_field">
-                                            <select class="wide">
-                                                <option data-display="Job type">Job type</option>
+                                            <select class="wide" name="type">
+                                                <option data-display="Job type" value="">Job type</option>
                                                 <option value="1">full time 1</option>
                                                 <option value="2">part time 2 </option>
                                             </select>
@@ -173,35 +184,27 @@
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="single_field">
-                                            <select class="wide">
-                                                <option data-display="Qualification">Qualification</option>
+                                            <select class="wide" name="qua">
+                                                <option data-display="Qualification" value="">Qualification</option>
                                                 <option value="1">Qualification 1</option>
                                                 <option value="2">Qualification 2</option>
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12">
-                                        <div class="single_field">
-                                            <select class="wide">
-                                                <option data-display="Gender">Gender</option>
-                                                <option value="1">male</option>
-                                                <option value="2">female</option>
-                                            </select>
-                                        </div>
-                                    </div>
                                 </div>
-                                <button>dddd</button>
+                                <div class="range_wrap">
+                                    <label for="amount">Price range:</label>
+                                    <div id="slider-range"></div>
+                                    <p>
+                                        <span style="border:0; color:#7A838B; font-size: 14px; font-weight:400;" id="range-visible"></span>
+                                        <input type="text" id="amount" name="sal" readonly style="display: none">
+                                    </p>
+                                </div>
+                                <div class="reset_btn">
+                                    <button  class="boxed-btn3 w-100" style="margin-bottom: 20px" type="submit">Apply</button>
+                                    <button  class="boxed-btn3 w-100" type="submit">Reset</button>
+                                </div>
                             </form>
-                        </div>
-                        <div class="range_wrap">
-                            <label for="amount">Price range:</label>
-                            <div id="slider-range"></div>
-                            <p>
-                                <input type="text" id="amount" readonly style="border:0; color:#7A838B; font-size: 14px; font-weight:400;">
-                            </p>
-                        </div>
-                        <div class="reset_btn">
-                            <button  class="boxed-btn3 w-100" type="submit">Reset</button>
                         </div>
                     </div>
                 </div>
@@ -386,10 +389,12 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                 max: 24600,
                 values: [ 750, 24600 ],
                 slide: function( event, ui ) {
-                    $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] +"/ Year" );
+                    $("#range-visible").text("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] +"/ Year");
+                    $( "#amount" ).val( ui.values[ 0 ] + "-" + ui.values[ 1 ]);
                 }
             });
-            $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
+            $( "#amount" ).val( $( "#slider-range" ).slider( "values", 0 ) + "-" + $( "#slider-range" ).slider( "values", 1 ));
+            $( "#range-visible" ).text( "$" + $( "#slider-range" ).slider( "values", 0 ) +
                 " - $" + $( "#slider-range" ).slider( "values", 1 ) + "/ Year");
         } );
         </script>
