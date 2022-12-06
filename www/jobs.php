@@ -1,25 +1,76 @@
 <?php
     $db = require $_SERVER['DOCUMENT_ROOT'] . '/common/db.php';
-
+    /** @var $db PDO */
     $jobs_listed = $db->query("SELECT SUM(vacancy_tally) as sum FROM jobs")->fetch(PDO::FETCH_ASSOC);
 
-    $keyword = $_GET['keyword'];
-    $loc = $_GET['loc'];
-    $cat = $_GET['exp'];
-    $type = $_GET['type'];
-    $qua = $_GET['qua'];
-    $sal = $_GET['sal'];
+    $is_first = true;
+    $query_str = "SELECT *
+            FROM jobs
+            JOIN city on city.id = jobs.city 
+            JOIN job_nature ON job_nature.id = jobs.job_nature 
+            JOIN country ON country.id = city.country
+            JOIN qualifications ON qualifications.id = jobs.qualification";
 
-    $str = "";
-    if (isset($loc)) $str+= "";
-    $db->query("");
+    $keyword = $_GET['keyword'] ?? null;
 
-    $jobs = $db->query("
-        SELECT title, citys, countries, job_natures, published
-        FROM jobs
-        JOIN city on city.id = jobs.city 
-        JOIN job_nature ON job_nature.id = jobs.job_nature 
-        JOIN country ON country.id = city.country")->fetchAll(PDO::FETCH_ASSOC);
+    if ($keyword != "") {
+        where_or_and($is_first, $query_str);
+
+        $query_str .= "LOWER(title) LIKE LOWER('%{$keyword}%') OR LOWER(description) LIKE LOWER('%{$keyword}%')";
+    }
+
+    $loc = $_GET['loc'] ?? null;
+
+    if ($loc != "") {
+        where_or_and($is_first, $query_str);
+
+        $query_str .= "city.id = {$loc}";
+    }
+
+    $cat = $_GET['cat'] ?? null;
+
+    if ($cat != "") {
+        where_or_and($is_first, $query_str);
+
+        $query_str .= "category = {$cat}";
+    }
+
+    $type = $_GET['type'] ?? null;
+
+    if ($type != "") {
+        where_or_and($is_first, $query_str);
+
+        $query_str .= "job_nature = {$type}";
+    }
+
+    $qua = $_GET['qua'] ?? null;
+
+    if ($qua != "") {
+        where_or_and($is_first, $query_str);
+
+        $query_str .= "qualification  = {$qua}";
+    }
+
+    $sal = $_GET['sal'] ?? null;
+
+    if ($sal != "") {
+        $range = explode("-", $sal);
+
+
+        where_or_and($is_first, $query_str);
+
+        $query_str .= "salary_from >= {$range[0]} AND salary_to <= {$range[1]}";
+    }
+
+    $jobs = $db->query($query_str)->fetchAll(PDO::FETCH_ASSOC);
+
+    function where_or_and(&$is_first, &$query_str) {
+        if ($is_first) {
+            $query_str .= " where ";
+            $is_first = false;
+        }
+        else $query_str .= " AND ";
+    }
 ?>
 <!doctype html>
 <html class="no-js" lang="zxx">
@@ -149,45 +200,60 @@
                                     <div class="col-lg-12">
                                         <div class="single_field">
                                             <select class="wide" name="loc">
-                                                <option data-display="Location" value="">Location</option>
-                                                <option value="Rangpur">Rangpur</option>
-                                                <option value="Dhaka">Dhaka </option>
+                                                <?php
+                                                $parameters_cities = $db->query("
+                                                        SELECT city.id, city.citys FROM jobs 
+                                                        JOIN city ON city.id = jobs.city GROUP BY city")->fetchAll(PDO::FETCH_ASSOC);
+                                                ?>
+                                                    <option data-display="Location" value="">Location</option>
+                                                <?php foreach ($parameters_cities as $item):?>
+                                                    <option value="<?=$item['id']?>" <?php if ($item['id'] == $loc):?> selected <?php endif;?> ><?=$item['citys']?></option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="single_field">
                                             <select class="wide" name="cat">
+                                                <?php
+                                                    $parameters_category = $db->query("
+                                                        SELECT category.id, category.categories FROM jobs 
+                                                        JOIN category ON category.id = jobs.category GROUP BY category")->fetchAll(PDO::FETCH_ASSOC);
+                                                ?>
                                                 <option data-display="Category" value="">Category</option>
-                                                <option value="1">Category 1</option>
-                                                <option value="2">Category 2 </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="single_field">
-                                            <select class="wide" name="exp">
-                                                <option data-display="Experience" value="">Experience</option>
-                                                <option value="1">Experience 1</option>
-                                                <option value="2">Experience 2 </option>
+                                                <?php foreach ($parameters_category as $item):?>
+                                                    <option value="<?=$item['id']?>" <?php if ($item['id'] == $cat):?> selected <?php endif;?>><?=$item['categories']?></option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="single_field">
                                             <select class="wide" name="type">
+                                                <?php
+                                                $parameters_job_type = $db->query("
+                                                        SELECT job_nature.id, job_nature.job_natures FROM jobs 
+                                                        JOIN job_nature ON job_nature.id = jobs.job_nature GROUP BY job_nature")->fetchAll(PDO::FETCH_ASSOC);
+                                                ?>
                                                 <option data-display="Job type" value="">Job type</option>
-                                                <option value="1">full time 1</option>
-                                                <option value="2">part time 2 </option>
+                                                <?php foreach ($parameters_job_type as $item):?>
+                                                    <option value="<?=$item['id']?>" <?php if ($item['id'] == $type):?> selected <?php endif;?>><?=$item['job_natures']?></option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="single_field">
                                             <select class="wide" name="qua">
+                                                <?php
+                                                $parameters_qualification = $db->query("
+                                                        SELECT qualifications.id, qualifications.qualifications FROM jobs 
+                                                        JOIN qualifications ON qualifications.id = jobs.qualification GROUP BY qualification")->fetchAll(PDO::FETCH_ASSOC);
+                                                ?>
                                                 <option data-display="Qualification" value="">Qualification</option>
-                                                <option value="1">Qualification 1</option>
-                                                <option value="2">Qualification 2</option>
+                                                <?php foreach ($parameters_qualification as $item):?>
+                                                    <option value="<?=$item['id']?>" <?php if ($item['id'] == $qua):?> selected <?php endif;?>><?=$item['qualifications']?></option>
+                                                <?php endforeach; ?>
                                             </select>
                                         </div>
                                     </div>
@@ -201,7 +267,6 @@
                                     </p>
                                 </div>
                                 <div class="reset_btn">
-                                    <button  class="boxed-btn3 w-100" style="margin-bottom: 20px" type="submit">Apply</button>
                                     <button  class="boxed-btn3 w-100" type="submit">Reset</button>
                                 </div>
                             </form>
@@ -386,8 +451,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
             $( "#slider-range" ).slider({
                 range: true,
                 min: 0,
-                max: 24600,
-                values: [ 750, 24600 ],
+                max: 120000,
+                values: [ 750, 120000 ],
                 slide: function( event, ui ) {
                     $("#range-visible").text("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] +"/ Year");
                     $( "#amount" ).val( ui.values[ 0 ] + "-" + ui.values[ 1 ]);

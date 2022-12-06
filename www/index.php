@@ -202,7 +202,7 @@
                 </div>
             </div>
             <div class="row">
-                <?php foreach ($categories as $category):?>
+                <?php foreach ($categories as $cat):?>
                     <?php require $_SERVER['DOCUMENT_ROOT'] . '/parts/pop_category.php'; ?>
                 <?php endforeach; ?>
             </div>
