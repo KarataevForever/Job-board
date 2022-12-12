@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteRule "^www/jobs" "www/jobs.php"
+RewriteRule ^jobs?(.*) www/jobs.php?%{QUERY_STRING}
