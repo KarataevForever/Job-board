@@ -4,7 +4,7 @@
     $jobs_listed = $db->query("SELECT SUM(vacancy_tally) as sum FROM jobs")->fetch(PDO::FETCH_ASSOC);
 
     $jobs = $db->query("
-    SELECT title, citys, countries, job_natures, published
+    SELECT jobs.id as jobs_id, title, citys, countries, job_natures, published
     FROM jobs
     JOIN city on city.id = jobs.city 
     JOIN job_nature ON job_nature.id = jobs.job_nature 
@@ -21,30 +21,7 @@
 <html class="no-js" lang="zxx">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Job Board</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- <link rel="manifest" href="site.webmanifest"> -->
-    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.png">
-    <!-- Place favicon.ico in the root directory -->
-
-    <!-- CSS here -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/magnific-popup.css">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/themify-icons.css">
-    <link rel="stylesheet" href="css/nice-select.css">
-    <link rel="stylesheet" href="css/flaticon.css">
-    <link rel="stylesheet" href="css/gijgo.css">
-    <link rel="stylesheet" href="css/animate.min.css">
-    <link rel="stylesheet" href="css/slicknav.css">
-
-    <link rel="stylesheet" href="css/style.css">
-    <!-- <link rel="stylesheet" href="css/responsive.css"> -->
+    <?php require $_SERVER['DOCUMENT_ROOT'] . '/parts/head.html'?>
 </head>
 
 <body>
@@ -71,11 +48,11 @@
                                     <nav>
                                         <ul id="navigation">
                                             <li><a href="index.php">home</a></li>
-                                            <li><a href="jobs.php">Browse Job</a></li>
+                                            <li><a href="jobs">Browse Job</a></li>
                                             <li><a href="#">pages <i class="ti-angle-down"></i></a>
                                                 <ul class="submenu">
                                                     <li><a href="candidate.html">Candidates </a></li>
-                                                    <li><a href="job_details.html">job details </a></li>
+                                                    <li><a href="job_details.php">job details </a></li>
                                                     <li><a href="elements.html">elements</a></li>
                                                 </ul>
                                             </li>
@@ -139,50 +116,58 @@
     <!-- catagory_area -->
     <div class="catagory_area">
         <div class="container">
-            <div class="row cat_search">
-                <div class="col-lg-3 col-md-4">
-                    <div class="single_input">
-                        <input type="text" placeholder="Search keyword">
+            <form action="jobs">
+                <div class="row cat_search">
+                    <div class="col-lg-3 col-md-4">
+                        <div class="single_input">
+                            <input type="text" placeholder="Search keyword" name="keyword">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4">
+                        <div class="single_input">
+                            <select class="wide" name="loc">
+                                <?php
+                                $parameters_cities = $db->query("
+                                                            SELECT city.id, city.citys FROM jobs 
+                                                            JOIN city ON city.id = jobs.city GROUP BY city")->fetchAll(PDO::FETCH_ASSOC);
+                                ?>
+                                <option data-display="Location" value="">Location</option>
+                                <?php foreach ($parameters_cities as $item):?>
+                                    <option value="<?=$item['id']?>"><?=$item['citys']?></option>
+                                <?php endforeach; ?>
+                              </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4">
+                        <div class="single_input">
+                            <select class="wide" name="cat">
+                                <?php
+                                $parameters_category = $db->query("
+                                                            SELECT category.id, category.categories FROM jobs 
+                                                            JOIN category ON category.id = jobs.category GROUP BY category")->fetchAll(PDO::FETCH_ASSOC);
+                                ?>
+                                <option data-display="Category" value="">Category</option>
+                                <?php foreach ($parameters_category as $item):?>
+                                    <option value="<?=$item['id']?>"><?=$item['categories']?></option>
+                                <?php endforeach; ?>
+                              </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-12">
+                        <div class="job_btn">
+                            <button class="boxed-btn3">Find Job</button>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4">
-                    <div class="single_input">
-                        <select class="wide" >
-                            <option data-display="Location">Location</option>
-                            <option value="1">Dhaka</option>
-                            <option value="2">Rangpur</option>
-                            <option value="4">Sylet</option>
-                          </select>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4">
-                    <div class="single_input">
-                        <select class="wide">
-                            <option data-display="Category">Category</option>
-                            <option value="1">Category 1</option>
-                            <option value="2">Category 2</option>
-                            <option value="4">Category 3</option>
-                          </select>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-12">
-                    <div class="job_btn">
-                        <a href="#" class="boxed-btn3">Find Job</a>
-                    </div>
-                </div>
-            </div>
+            </form>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="popular_search d-flex align-items-center">
                         <span>Popular Search:</span>
                         <ul>
-                            <li><a href="#">Design & Creative</a></li>
-                            <li><a href="#">Marketing</a></li>
-                            <li><a href="#">Administration</a></li>
-                            <li><a href="#">Teaching & Education</a></li>
-                            <li><a href="#">Engineering</a></li>
-                            <li><a href="#">Software & Web</a></li>
-                            <li><a href="#">Telemarketing</a></li>
+                            <?php foreach ($categories as $item):?>
+                                <li><a href="jobs?cat=<?=$item['category']?>"><?=$item['categories']?></a></li>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
                 </div>
@@ -221,7 +206,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="brouse_job text-right">
-                        <a href="jobs.php" class="boxed-btn4">Browse More Job</a>
+                        <a href="jobs" class="boxed-btn4">Browse More Job</a>
                     </div>
                 </div>
             </div>
@@ -357,7 +342,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="brouse_job text-right">
-                        <a href="jobs.php" class="boxed-btn4">Browse More Job</a>
+                        <a href="jobs" class="boxed-btn4">Browse More Job</a>
                     </div>
                 </div>
             </div>
@@ -367,7 +352,7 @@
                         <div class="thumb">
                             <img src="img/svg_icon/5.svg" alt="">
                         </div>
-                        <a href="jobs.php"><h3>Snack Studio</h3></a>
+                        <a href="jobs"><h3>Snack Studio</h3></a>
                         <p> <span>50</span> Available position</p>
                     </div>
                 </div>
@@ -376,7 +361,7 @@
                         <div class="thumb">
                             <img src="img/svg_icon/4.svg" alt="">
                         </div>
-                        <a href="jobs.php"><h3>Snack Studio</h3></a>
+                        <a href="jobs"><h3>Snack Studio</h3></a>
                         <p> <span>50</span> Available position</p>
                     </div>
                 </div>
@@ -385,7 +370,7 @@
                         <div class="thumb">
                             <img src="img/svg_icon/3.svg" alt="">
                         </div>
-                        <a href="jobs.php"><h3>Snack Studio</h3></a>
+                        <a href="jobs"><h3>Snack Studio</h3></a>
                         <p> <span>50</span> Available position</p>
                     </div>
                 </div>
@@ -394,7 +379,7 @@
                         <div class="thumb">
                             <img src="img/svg_icon/1.svg" alt="">
                         </div>
-                        <a href="jobs.php"><h3>Snack Studio</h3></a>
+                        <a href="jobs"><h3>Snack Studio</h3></a>
                         <p> <span>50</span> Available position</p>
                     </div>
                 </div>

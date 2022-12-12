@@ -4,7 +4,7 @@
     $jobs_listed = $db->query("SELECT SUM(vacancy_tally) as sum FROM jobs")->fetch(PDO::FETCH_ASSOC);
 
     $is_first = true;
-    $query_str = "SELECT *
+    $query_str = "SELECT *, jobs.id as jobs_id
             FROM jobs
             JOIN city on city.id = jobs.city 
             JOIN job_nature ON job_nature.id = jobs.job_nature 
@@ -76,31 +76,7 @@
 <html class="no-js" lang="zxx">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Job Board</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- <link rel="manifest" href="site.webmanifest"> -->
-    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.png">
-    <!-- Place favicon.ico in the root directory -->
-
-    <!-- CSS here -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/magnific-popup.css">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/themify-icons.css">
-    <link rel="stylesheet" href="css/nice-select.css">
-    <link rel="stylesheet" href="css/flaticon.css">
-    <link rel="stylesheet" href="css/jquery-ui.css">
-    <link rel="stylesheet" href="css/gijgo.css">
-    <link rel="stylesheet" href="css/animate.min.css">
-    <link rel="stylesheet" href="css/slicknav.css">
-
-    <link rel="stylesheet" href="css/style.css">
-    <!-- <link rel="stylesheet" href="css/responsive.css"> -->
+    <?php require $_SERVER['DOCUMENT_ROOT'] . '/parts/head.html'?>
 </head>
 
 <body>
@@ -118,7 +94,7 @@
                             <div class="col-xl-3 col-lg-2">
                                 <div class="logo">
                                     <a href="index.php">
-                                        <img src="img/logo.png" alt="">
+                                        <img src="/www/img/logo.png" alt="">
                                     </a>
                                 </div>
                             </div>
@@ -131,7 +107,7 @@
                                             <li><a href="#">pages <i class="ti-angle-down"></i></a>
                                                 <ul class="submenu">
                                                     <li><a href="candidate.html">Candidates </a></li>
-                                                    <li><a href="job_details.html">job details </a></li>
+                                                    <li><a href="job_details.php">job details </a></li>
                                                     <li><a href="elements.html">elements</a></li>
                                                 </ul>
                                             </li>
@@ -190,7 +166,7 @@
                     <div class="job_filter white-bg">
                         <div class="form_inner white-bg">
                             <h3>Filter</h3>
-                            <form action="/www/jobs.php">
+                            <form action="/www/jobs">
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="single_field">
@@ -204,10 +180,11 @@
                                                 $parameters_cities = $db->query("
                                                         SELECT city.id, city.citys FROM jobs 
                                                         JOIN city ON city.id = jobs.city GROUP BY city")->fetchAll(PDO::FETCH_ASSOC);
+                                                var_dump($loc);
                                                 ?>
                                                     <option data-display="Location" value="">Location</option>
                                                 <?php foreach ($parameters_cities as $item):?>
-                                                    <option value="<?=$item['id']?>" <?php if ($item['id'] == $loc):?> selected <?php endif;?> ><?=$item['citys']?></option>
+                                                    <option value="<?=$item['id']?>"  <?php if ($item['id'] == $loc):?> selected <?php endif;?> ><?=$item['citys']?></option>
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>
@@ -316,7 +293,7 @@
                         <div class="footer_widget wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s">
                             <div class="footer_logo">
                                 <a href="#">
-                                    <img src="img/logo.png" alt="">
+                                    <img src="/www/img/logo.png" alt="">
                                 </a>
                             </div>
                             <p>
@@ -411,40 +388,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     </footer>
     <!--/ footer end  -->
 
-    <!-- link that opens popup -->
-    <!-- JS here -->
-    <script src="js/vendor/modernizr-3.5.0.min.js"></script>
-    <script src="js/vendor/jquery-1.12.4.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/isotope.pkgd.min.js"></script>
-    <script src="js/ajax-form.js"></script>
-    <script src="js/waypoints.min.js"></script>
-    <script src="js/jquery.counterup.min.js"></script>
-    <script src="js/imagesloaded.pkgd.min.js"></script>
-    <script src="js/scrollIt.js"></script>
-    <script src="js/jquery.scrollUp.min.js"></script>
-    <script src="js/wow.min.js"></script>
-    <script src="js/nice-select.min.js"></script>
-    <script src="js/jquery.slicknav.min.js"></script>
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/plugins.js"></script>
-    <!-- <script src="js/gijgo.min.js"></script> -->
-    <script src="js/range.js"></script>
-
-
-
-    <!--contact js-->
-    <script src="js/contact.js"></script>
-    <script src="js/jquery.ajaxchimp.min.js"></script>
-    <script src="js/jquery.form.js"></script>
-    <script src="js/jquery.validate.min.js"></script>
-    <script src="js/mail-script.js"></script>
-
-
-    <script src="js/main.js"></script>
-
+    <?php require $_SERVER['DOCUMENT_ROOT'] . '/parts/js_scripts.html'?>
 
 	<script>
         $( function() {
