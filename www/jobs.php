@@ -166,7 +166,7 @@
                     <div class="job_filter white-bg">
                         <div class="form_inner white-bg">
                             <h3>Filter</h3>
-                            <form action="/www/jobs">
+                            <form action="/www/jobs" id="form">
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="single_field">
@@ -396,7 +396,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                 range: true,
                 min: 0,
                 max: 120000,
-                values: [ 750, 120000 ],
+                values: [ 0, 120000 ],
                 slide: function( event, ui ) {
                     $("#range-visible").text("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] +"/ Year");
                     $( "#amount" ).val( ui.values[ 0 ] + "-" + ui.values[ 1 ]);

@@ -1,3 +1,25 @@
+<?php
+    /** @var $db pdo*/
+    $db = require $_SERVER['DOCUMENT_ROOT'] . '/common/db.php';
+
+    $job_id = $_GET['id'];
+
+    $job_info = $db->query("SELECT published, 
+                                            vacancy_tally, 
+                                            salary_from, 
+                                            salary_to, 
+                                            city.citys as city, 
+                                            country.countries as country, 
+                                            job_nature.job_natures as job_nature,
+                                            description,
+                                            title
+                                    FROM jobs
+                                    JOIN city ON jobs.city = city.id
+                                    JOIN country ON city.id = country.id
+                                    JOIN job_nature ON job_nature.id = jobs.job_nature
+                                    WHERE jobs.id = {$job_id}")->fetch(PDO::FETCH_ASSOC);
+    $date = date( "j F, Y", strtotime( $job_info['published'] ) );
+?>
 <!doctype html>
 <html class="no-js" lang="zxx">
 
@@ -76,7 +98,7 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="bradcam_text">
-                        <h3>Software Engineer</h3>
+                        <h3><?=$job_info['title']?></h3>
                     </div>
                 </div>
             </div>
@@ -95,13 +117,13 @@
                                     <img src="img/svg_icon/1.svg" alt="">
                                 </div>
                                 <div class="jobs_conetent">
-                                    <a href="#"><h4>Software Engineer</h4></a>
+                                    <a href="#"><h4><?=$job_info['title']?></h4></a>
                                     <div class="links_locat d-flex align-items-center">
                                         <div class="location">
-                                            <p> <i class="fa fa-map-marker"></i> California, USA</p>
+                                            <p> <i class="fa fa-map-marker"></i><?=$job_info['city']?>, <?=$job_info['country']?></p>
                                         </div>
                                         <div class="location">
-                                            <p> <i class="fa fa-clock-o"></i> Part-time</p>
+                                            <p> <i class="fa fa-clock-o"></i><?=$job_info['job_nature']?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -114,74 +136,36 @@
                         </div>
                     </div>
                     <div class="descript_wrap white-bg">
-                        <div class="single_wrap">
-                            <h4>Job description</h4>
-                            <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing.</p>
-                            <p>Variations of passages of lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing.</p>
-                        </div>
-                        <div class="single_wrap">
-                            <h4>Responsibility</h4>
-                            <ul>
-                                <li>The applicants should have experience in the following areas.
-                                </li>
-                                <li>Have sound knowledge of commercial activities.</li>
-                                <li>Leadership, analytical, and problem-solving abilities.</li>
-                                <li>Should have vast knowledge in IAS/ IFRS, Company Act, Income Tax, VAT.</li>
-                            </ul>
-                        </div>
-                        <div class="single_wrap">
-                            <h4>Qualifications</h4>
-                            <ul>
-                                <li>The applicants should have experience in the following areas.
-                                </li>
-                                <li>Have sound knowledge of commercial activities.</li>
-                                <li>Leadership, analytical, and problem-solving abilities.</li>
-                                <li>Should have vast knowledge in IAS/ IFRS, Company Act, Income Tax, VAT.</li>
-                            </ul>
-                        </div>
-                        <div class="single_wrap">
-                            <h4>Benefits</h4>
-                            <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing.</p>
-                        </div>
+                        <?=$job_info['description']?>
                     </div>
                     <div class="apply_job_form white-bg">
                         <h4>Apply for the job</h4>
-                        <form action="#">
+                        <form action="/app/job_form_handler.php" method="post">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="input_field">
-                                        <input type="text" placeholder="Your name">
+                                        <input type="text" name="name" placeholder="Your name">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="input_field">
-                                        <input type="text" placeholder="Email">
+                                        <input type="text" name="email" placeholder="Email">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="input_field">
-                                        <input type="text" placeholder="Website/Portfolio link">
+                                        <input type="text" name="portfolio" placeholder="Website/Portfolio link">
                                     </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                          <button type="button" id="inputGroupFileAddon03"><i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                                          </button>
-                                        </div>
-                                        <div class="custom-file">
-                                          <input type="file" class="custom-file-input" id="inputGroupFile03" aria-describedby="inputGroupFileAddon03">
-                                          <label class="custom-file-label" for="inputGroupFile03">Upload CV</label>
-                                        </div>
-                                      </div>
-                                </div>
+
                                 <div class="col-md-12">
                                     <div class="input_field">
-                                        <textarea name="#" id="" cols="30" rows="10" placeholder="Coverletter"></textarea>
+                                        <textarea name="#" id="" cols="30" rows="10" name="coverletter" placeholder="Coverletter"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="submit_btn">
+                                        <input type="hidden" name="title" value="<?=$job_info['title']?>">
                                         <button class="boxed-btn3 w-100" type="submit">Apply Now</button>
                                     </div>
                                 </div>
@@ -196,11 +180,11 @@
                         </div>
                         <div class="job_content">
                             <ul>
-                                <li>Published on: <span>12 Nov, 2019</span></li>
-                                <li>Vacancy: <span>2 Position</span></li>
-                                <li>Salary: <span>50k - 120k/y</span></li>
-                                <li>Location: <span>California, USA</span></li>
-                                <li>Job Nature: <span> Full-time</span></li>
+                                <li>Published on: <span><?=$date?></span></li>
+                                <li>Vacancy: <span><?=$job_info['vacancy_tally']?> Position</span></li>
+                                <li>Salary: <span><?=$job_info['salary_from']?> - <?=$job_info['salary_to']?>/y</span></li>
+                                <li>Location: <span><?=$job_info['city']?>, <?=$job_info['country']?></span></li>
+                                <li>Job Nature: <span><?=$job_info['job_nature']?></span></li>
                             </ul>
                         </div>
                     </div>

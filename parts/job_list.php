@@ -19,7 +19,7 @@
         <div class="jobs_right">
             <div class="apply_now">
                 <a class="heart_mark" href="#"> <i class="ti-heart"></i> </a>
-                <a href="job_details.php?id=<?=$job['id']?>" class="boxed-btn3">Apply Now</a>
+                <a href="job_details.php?id=<?=$job['jobs_id']?>" class="boxed-btn3">Apply Now</a>
             </div>
             <div class="date">
                 <p>Date line: <?=date( "j F, Y" , strtotime($job['published']) )?></p>
