@@ -149,7 +149,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="input_field">
-                                        <input type="text" name="email" placeholder="Email">
+                                        <input type="email" name="email" placeholder="Email">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -160,7 +160,7 @@
 
                                 <div class="col-md-12">
                                     <div class="input_field">
-                                        <textarea name="#" id="" cols="30" rows="10" name="coverletter" placeholder="Coverletter"></textarea>
+                                        <textarea  id="" cols="30" rows="10" name="coverletter" placeholder="Coverletter"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-12">

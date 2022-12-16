@@ -1,10 +1,10 @@
 <?php
 
-$title = $_GET['title'];
+$title = $_POST['title'];
 $name = $_POST['name'] ?? "Unknown";
 $email = $_POST['email'] ?? "Email";
 $portfolio = $_POST['portfolio'];
 $letter = $_POST['coverletter'];
-
-mail("job@jobboard.com", "{$title}", "Заявка принята");
+var_dump($title);
+mail("job@jobboard.com", "{$title}", "{$name}\n{$email}\n{$portfolio}\n{$letter}");
 header('Location: /');

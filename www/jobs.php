@@ -52,6 +52,7 @@
     }
 
     $sal = $_GET['sal'] ?? null;
+    $range = [0, 120000];
 
     if ($sal != "") {
         $range = explode("-", $sal);
@@ -396,7 +397,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                 range: true,
                 min: 0,
                 max: 120000,
-                values: [ 0, 120000 ],
+                values: [ <?=$range[0]?>, <?=$range[1]?> ],
                 slide: function( event, ui ) {
                     $("#range-visible").text("$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] +"/ Year");
                     $( "#amount" ).val( ui.values[ 0 ] + "-" + ui.values[ 1 ]);
