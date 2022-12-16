@@ -1,2 +1,6 @@
 <?php
-header("location: /www/");
+
+define('BASE_DIR', dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR);
+define('SLIM_APP_BASEPATH', '/' . basename(__DIR__));
+
+require BASE_DIR . 'app/bootstrap.php';
