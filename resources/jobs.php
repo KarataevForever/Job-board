@@ -9,7 +9,6 @@
 <!--[if lte IE 9]>
 <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
 <![endif]-->
-
 <!-- header-start -->
 <header>
     <div class="header-area ">
@@ -96,65 +95,47 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="single_field">
-                                        <input type="text" placeholder="Search keyword" name="keyword">
+                                        <input type="text" placeholder="Search keyword" name="key">
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="single_field">
-                                        <select class="wide" name="loc">
-                                            <?php
-                                            $parameters_cities = $db->query("
-                                                        SELECT city.id, city.citys FROM jobs 
-                                                        JOIN city ON city.id = jobs.city GROUP BY city")->fetchAll(PDO::FETCH_ASSOC);
-                                            ?>
+                                        <select class="wide" name="l">
                                             <option data-display="Location" value="">Location</option>
-                                            <?php foreach ($parameters_cities as $item):?>
-                                                <option value="<?=$item['id']?>"  <?php if ($item['id'] == $loc):?> selected <?php endif;?> ><?=$item['citys']?></option>
+                                            <?php
+                                            var_dump($params);
+                                            foreach ($parameters_cities as $item):?>
+                                                <option value="<?=$item['id']?>"  <?php if ($item['id'] == $params['l']):?> selected <?php endif;?> ><?=$item['citys']?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="single_field">
-                                        <select class="wide" name="cat">
-                                            <?php
-                                            $parameters_category = $db->query("
-                                                        SELECT category.id, category.categories FROM jobs 
-                                                        JOIN category ON category.id = jobs.category GROUP BY category")->fetchAll(PDO::FETCH_ASSOC);
-                                            ?>
+                                        <select class="wide" name="c">
                                             <option data-display="Category" value="">Category</option>
                                             <?php foreach ($parameters_category as $item):?>
-                                                <option value="<?=$item['id']?>" <?php if ($item['id'] == $cat):?> selected <?php endif;?>><?=$item['categories']?></option>
+                                                <option value="<?=$item['id']?>" <?php if ($item['id'] == $params['c']):?> selected <?php endif;?>><?=$item['categories']?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="single_field">
-                                        <select class="wide" name="type">
-                                            <?php
-                                            $parameters_job_type = $db->query("
-                                                        SELECT job_nature.id, job_nature.job_natures FROM jobs 
-                                                        JOIN job_nature ON job_nature.id = jobs.job_nature GROUP BY job_nature")->fetchAll(PDO::FETCH_ASSOC);
-                                            ?>
+                                        <select class="wide" name="ty">
                                             <option data-display="Job type" value="">Job type</option>
                                             <?php foreach ($parameters_job_type as $item):?>
-                                                <option value="<?=$item['id']?>" <?php if ($item['id'] == $type):?> selected <?php endif;?>><?=$item['job_natures']?></option>
+                                                <option value="<?=$item['id']?>" <?php if ($item['id'] == $params['t']):?> selected <?php endif;?>><?=$item['job_natures']?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="single_field">
-                                        <select class="wide" name="qua">
-                                            <?php
-                                            $parameters_qualification = $db->query("
-                                                        SELECT qualifications.id, qualifications.qualifications FROM jobs 
-                                                        JOIN qualifications ON qualifications.id = jobs.qualification GROUP BY qualification")->fetchAll(PDO::FETCH_ASSOC);
-                                            ?>
+                                        <select class="wide" name="q">
                                             <option data-display="Qualification" value="">Qualification</option>
                                             <?php foreach ($parameters_qualification as $item):?>
-                                                <option value="<?=$item['id']?>" <?php if ($item['id'] == $qua):?> selected <?php endif;?>><?=$item['qualifications']?></option>
+                                                <option value="<?=$item['id']?>" <?php if ($item['id'] == $params['q']):?> selected <?php endif;?>><?=$item['qualifications']?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
@@ -165,7 +146,7 @@
                                 <div id="slider-range"></div>
                                 <p>
                                     <span style="border:0; color:#7A838B; font-size: 14px; font-weight:400;" id="range-visible"></span>
-                                    <input type="text" id="amount" name="sal" readonly style="display: none">
+                                    <input type="text" id="amount" name="s" readonly style="display: none">
                                 </p>
                             </div>
                             <div class="reset_btn">
@@ -198,8 +179,9 @@
 
                 <div class="job_lists m-0">
                     <div class="row">
+
                         <?php foreach ($jobs as $job):?>
-                            <?php require $_SERVER['DOCUMENT_ROOT'] . '/parts/job_list.php'?>
+                            <?= $this->fetch('./parts/job_list.php', ['job' => $job]); ?>
                         <?php endforeach; ?>
                     </div>
                 </div>
@@ -218,7 +200,7 @@
                     <div class="footer_widget wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s">
                         <div class="footer_logo">
                             <a href="#">
-                                <img src="/www/img/logo.png" alt="">
+                                <img src="/public/img/logo.png" alt="">
                             </a>
                         </div>
                         <p>
@@ -313,7 +295,7 @@
 </footer>
 <!--/ footer end  -->
 
-<?php require $_SERVER['DOCUMENT_ROOT'] . '/parts/js_scripts.html'?>
+<?php $this->fetch('/parts/js_scripts.html')?>
 
 <script>
     $( function() {

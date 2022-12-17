@@ -108,6 +108,7 @@
                         <div class="single_input">
                             <select class="wide" name="loc">
                                 <option data-display="Location" value="">Location</option>
+                                <?php var_dump($parameters_cities);?>
                                 <?php foreach ($parameters_cities as $item):?>
                                     <option value="<?=$item['id']?>"><?=$item['citys']?></option>
                                 <?php endforeach; ?>
@@ -118,6 +119,7 @@
                         <div class="single_input">
                             <select class="wide" name="cat">
                                 <option data-display="Category" value="">Category</option>
+
                                 <?php foreach ($parameters_category as $item):?>
                                     <option value="<?=$item['id']?>"><?=$item['categories']?></option>
                                 <?php endforeach; ?>
