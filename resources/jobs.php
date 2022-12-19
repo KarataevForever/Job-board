@@ -18,8 +18,8 @@
                     <div class="row align-items-center">
                         <div class="col-xl-3 col-lg-2">
                             <div class="logo">
-                                <a href="index.php">
-                                    <img src="/www/img/logo.png" alt="">
+                                <a href="/">
+                                    <img src="/public/img/logo.png" alt="">
                                 </a>
                             </div>
                         </div>
@@ -27,8 +27,8 @@
                             <div class="main-menu  d-none d-lg-block">
                                 <nav>
                                     <ul id="navigation">
-                                        <li><a href="index.php">home</a></li>
-                                        <li><a href="jobs.php">Browse Job</a></li>
+                                        <li><a href="/">home</a></li>
+                                        <li><a href="jobs">Browse Job</a></li>
                                         <li><a href="#">pages <i class="ti-angle-down"></i></a>
                                             <ul class="submenu">
                                                 <li><a href="candidate.html">Candidates </a></li>
@@ -91,7 +91,7 @@
                 <div class="job_filter white-bg">
                     <div class="form_inner white-bg">
                         <h3>Filter</h3>
-                        <form action="/www/jobs" id="form">
+                        <form action="/jobs" id="filter-form">
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="single_field">
@@ -102,9 +102,7 @@
                                     <div class="single_field">
                                         <select class="wide" name="l">
                                             <option data-display="Location" value="">Location</option>
-                                            <?php
-                                            var_dump($params);
-                                            foreach ($parameters_cities as $item):?>
+                                            <?php foreach ($parameters_cities as $item):?>
                                                 <option value="<?=$item['id']?>"  <?php if ($item['id'] == $params['l']):?> selected <?php endif;?> ><?=$item['citys']?></option>
                                             <?php endforeach; ?>
                                         </select>
@@ -122,7 +120,7 @@
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="single_field">
-                                        <select class="wide" name="ty">
+                                        <select class="wide" name="t">
                                             <option data-display="Job type" value="">Job type</option>
                                             <?php foreach ($parameters_job_type as $item):?>
                                                 <option value="<?=$item['id']?>" <?php if ($item['id'] == $params['t']):?> selected <?php endif;?>><?=$item['job_natures']?></option>
@@ -150,7 +148,10 @@
                                 </p>
                             </div>
                             <div class="reset_btn">
-                                <button  class="boxed-btn3 w-100" type="submit">Reset</button>
+                                <a href="/jobs" target="_self" class="boxed-btn3 w-100">Reset</a>
+                            </div>
+                            <div class="reset_btn" style="margin-top: 10px;">
+                                <button  class="boxed-btn3 w-100" type="submit">Apply</button>
                             </div>
                         </form>
                     </div>
@@ -295,7 +296,7 @@
 </footer>
 <!--/ footer end  -->
 
-<?php $this->fetch('/parts/js_scripts.html')?>
+<?= $this->fetch('./parts/scripts.html')?>
 
 <script>
     $( function() {
@@ -313,6 +314,21 @@
         $( "#range-visible" ).text( "$" + $( "#slider-range" ).slider( "values", 0 ) +
             " - $" + $( "#slider-range" ).slider( "values", 1 ) + "/ Year");
     } );
+
+    let filterForm = document.querySelector("#filter-form");
+
+    filterForm.onsubmit = e => {
+        for (let i = filterForm.length - 1; i >= 0; i--) {
+            console.log(filterForm[i].tagName);
+            if (filterForm[i].tagName == "SELECT") {
+                if (!filterForm[i][filterForm[i].selectedIndex].value) {
+                    filterForm[i].remove();
+                    continue;
+                }
+            }
+            if (!filterForm[i].value) filterForm[i].remove();
+        }
+    }
 </script>
 </body>
 

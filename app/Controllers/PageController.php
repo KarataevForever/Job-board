@@ -6,6 +6,7 @@ use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use Slim\Views\PhpRenderer;
 
+
 class PageController
 {
     public function index(Request $request, Response $response, $args)
@@ -45,13 +46,6 @@ class PageController
     public function jobs(Request $request, Response $response, $args) {
         $renderer = new PhpRenderer('resources');
 
-        $query_str = ORM::for_table('')->raw_query("SELECT *, jobs.id as jobs_id
-            FROM jobs
-            JOIN city on city.id = jobs.city 
-            JOIN job_nature ON job_nature.id = jobs.job_nature 
-            JOIN country ON country.id = city.country
-            JOIN qualifications ON qualifications.id = jobs.qualification")->find_many();
-
         $job_listed = ORM::forTable('jobs')->raw_query("SELECT SUM(vacancy_tally) as sum FROM jobs")->find_one();
 
         $parameters_cities = ORM::for_table('jobs')->raw_query("SELECT city.id, city.citys FROM jobs 
@@ -79,17 +73,23 @@ class PageController
 
         $params = $request->getQueryParams();
 
+        if (isset($params['key']) && $params['key']) $filtered = $filtered->where_raw("LOWER(title) LIKE LOWER('%?%') OR LOWER(description) LIKE LOWER('%?%')");
+        if (isset($params['l']) && $params['l'] != "") $filtered = $filtered->where('city.id', $params['l']); else $params['l'] = null;
+        if (isset($params['c']) && $params['c'] != "") $filtered = $filtered->where('jobs.category', $params['c']); else $params['c'] = null;
+        if (isset($params['t']) && $params['t'] != "") $filtered = $filtered->where('job_nature.id', $params['t']);  else $params['t'] = null;
+        if (isset($params['q']) && $params['q'] != "") $filtered = $filtered->where('jobs.qualification', $params['q']);  else $params['q'] = null;
 
+        $range = [0, 120000];
 
-        if (isset($params['l'])) $filtered = $filtered->where('city.id', $params['l']);
-        if (isset($params['c'])) $filtered = $filtered->where('jobs.category', $params['c']);
-        if (isset($params['t'])) $filtered = $filtered->where('job_nature.id', $params['t']);
-        if (isset($params['q'])) $filtered = $filtered->where('jobs.qualification', $params['q']);
+        if (isset($params['s']) && $params['s'] != "") {
+            $range = explode("-", $params['s']);
+
+            $filtered = $filtered->where_raw('(salary_from >= ? AND salary_to <= ?)', [$range[0], $range[1]] );
+        }
 
         $filtered = $filtered->find_many();
 
         return $renderer->render($response, "jobs.php", [
-            'query_str' => $query_str,
             'jobs_listed' => $job_listed,
             'parameters_cities' => $parameters_cities,
             'parameters_category' => $parameters_category,
@@ -97,7 +97,49 @@ class PageController
             'parameters_qualification' => $parameters_qualification,
             'jobs' => $filtered,
             'params' => $params,
+            'range' => $range,
 
         ]);
+    }
+    public function job_details(Request $request, Response $response, $args) {
+        $renderer = new PhpRenderer('resources');
+
+        $job_id = $args['id'];
+
+        $job_info = ORM::for_table('')->raw_query("SELECT published, 
+                                            vacancy_tally, 
+                                            salary_from, 
+                                            salary_to, 
+                                            city.citys as city, 
+                                            country.countries as country, 
+                                            job_nature.job_natures as job_nature,
+                                            description,
+                                            title
+                                    FROM jobs
+                                    JOIN city ON jobs.city = city.id
+                                    JOIN country ON city.id = country.id
+                                    JOIN job_nature ON job_nature.id = jobs.job_nature
+                                    WHERE jobs.id = {$job_id}")->find_one();
+
+        $date = date( "j F, Y", strtotime( $job_info['published'] ) );
+
+        return $renderer->render($response, "job_details.php", [
+            'job_info' => $job_info,
+            'date' => $date,
+        ]);
+    }
+    public function job_handler(Request $request, Response $response, $args) {
+        $params = $request->getParsedBody();
+
+        $title = $params['title'];
+        $name = $params['name'] ?? "Unknown";
+        $email = $params['email'] ?? "Email";
+        $portfolio = $params['portfolio'];
+        $letter = $params['coverletter'];
+
+        mail("job@jobboard.com", "{$title}", "{$name}\n{$email}\n{$portfolio}\n{$letter}");
+
+
+        return $response->withStatus(302)->withHeader('Location', '/');
     }
 }
