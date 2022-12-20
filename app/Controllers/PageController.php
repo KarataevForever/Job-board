@@ -73,7 +73,7 @@ class PageController
 
         $params = $request->getQueryParams();
 
-        if (isset($params['key']) && $params['key']) $filtered = $filtered->where_raw("LOWER(title) LIKE LOWER('%?%') OR LOWER(description) LIKE LOWER('%?%')");
+        if (isset($params['key']) && $params['key']) $filtered = $filtered->where_raw("LOWER(title) LIKE LOWER('%{$params['key']}%') OR LOWER(description) LIKE LOWER('%{$params['key']}%')");
         if (isset($params['l']) && $params['l'] != "") $filtered = $filtered->where('city.id', $params['l']); else $params['l'] = null;
         if (isset($params['c']) && $params['c'] != "") $filtered = $filtered->where('jobs.category', $params['c']); else $params['c'] = null;
         if (isset($params['t']) && $params['t'] != "") $filtered = $filtered->where('job_nature.id', $params['t']);  else $params['t'] = null;

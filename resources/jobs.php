@@ -99,7 +99,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
-                                    <div class="single_field">
+                                    <div class="single_field" id="loc">
                                         <select class="wide" name="l">
                                             <option data-display="Location" value="">Location</option>
                                             <?php foreach ($parameters_cities as $item):?>
@@ -109,7 +109,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
-                                    <div class="single_field">
+                                    <div class="single_field" id="cat">
                                         <select class="wide" name="c">
                                             <option data-display="Category" value="">Category</option>
                                             <?php foreach ($parameters_category as $item):?>
@@ -119,7 +119,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
-                                    <div class="single_field">
+                                    <div class="single_field" id="type">
                                         <select class="wide" name="t">
                                             <option data-display="Job type" value="">Job type</option>
                                             <?php foreach ($parameters_job_type as $item):?>
@@ -129,7 +129,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
-                                    <div class="single_field">
+                                    <div class="single_field" id="qua">
                                         <select class="wide" name="q">
                                             <option data-display="Qualification" value="">Qualification</option>
                                             <?php foreach ($parameters_qualification as $item):?>

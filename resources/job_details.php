@@ -28,8 +28,8 @@
                                 <div class="main-menu  d-none d-lg-block">
                                     <nav>
                                         <ul id="navigation">
-                                            <li><a href="index.php">home</a></li>
-                                            <li><a href="jobs.php">Browse Job</a></li>
+                                            <li><a href="/">home</a></li>
+                                            <li><a href="jobs">Browse Job</a></li>
                                             <li><a href="#">pages <i class="ti-angle-down"></i></a>
                                                 <ul class="submenu">
                                                     <li><a href="candidate.html">Candidates </a></li>

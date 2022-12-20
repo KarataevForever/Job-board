@@ -9,7 +9,6 @@
     <!--[if lte IE 9]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
         <![endif]-->
-
     <!-- header-start -->
     <header>
         <div class="header-area ">
@@ -97,18 +96,17 @@
     <!-- catagory_area -->
     <div class="catagory_area">
         <div class="container">
-            <form action="jobs">
+            <form action="jobs" id="filter-form">
                 <div class="row cat_search">
                     <div class="col-lg-3 col-md-4">
                         <div class="single_input">
-                            <input type="text" placeholder="Search keyword" name="keyword">
+                            <input type="text" placeholder="Search keyword" name="key">
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-4">
-                        <div class="single_input">
-                            <select class="wide" name="loc">
+                        <div class="single_input" id="loc">
+                            <select class="wide" name="l">
                                 <option data-display="Location" value="">Location</option>
-                                <?php var_dump($parameters_cities);?>
                                 <?php foreach ($parameters_cities as $item):?>
                                     <option value="<?=$item['id']?>"><?=$item['citys']?></option>
                                 <?php endforeach; ?>
@@ -116,10 +114,9 @@
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-4">
-                        <div class="single_input">
-                            <select class="wide" name="cat">
+                        <div class="single_input" id="cat">
+                            <select class="wide" name="c">
                                 <option data-display="Category" value="">Category</option>
-
                                 <?php foreach ($parameters_category as $item):?>
                                     <option value="<?=$item['id']?>"><?=$item['categories']?></option>
                                 <?php endforeach; ?>
@@ -133,6 +130,22 @@
                     </div>
                 </div>
             </form>
+            <script>
+                let filterForm = document.querySelector("#filter-form");
+
+                filterForm.onsubmit = e => {
+                    for (let i = filterForm.length - 1; i >= 0; i--) {
+                        console.log(filterForm[i].tagName);
+                        if (filterForm[i].tagName == "SELECT") {
+                            if (!filterForm[i][filterForm[i].selectedIndex].value) {
+                                filterForm[i].remove();
+                                continue;
+                            }
+                        }
+                        if (!filterForm[i].value) filterForm[i].remove();
+                    }
+                }
+            </script>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="popular_search d-flex align-items-center">

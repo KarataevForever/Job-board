@@ -5,7 +5,7 @@
                 <img src="/public/img/svg_icon/1.svg" alt="">
             </div>
             <div class="jobs_conetent">
-                <a href="job_details.php?id=<?=$job->jobs_id?>"><h4><?=$job->title?></h4></a>
+                <a href="jobs/<?=$job->jobs_id?>"><h4><?=$job->title?></h4></a>
                 <div class="links_locat d-flex align-items-center">
                     <div class="location">
                         <p> <i class="fa fa-map-marker"></i> <?=$job->citys?>, <?=$job->countries?></p>
